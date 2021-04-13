@@ -1,0 +1,318 @@
+<!doctype html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script>
+    function plotChart(divId, chartData) {
+        // Convert from stringified html, to valid JSON
+        const chartDetails = JSON.parse(chartData.replace(/&quot;/g,'"'));
+        new Chart(document.getElementById(divId), {
+            type: chartDetails.type,
+            data: {
+                labels: chartDetails.labels,
+                datasets: chartDetails.datasets
+            },
+            options: {
+                legend: { display: chartDetails.legend },
+                title: {
+                    display: true,
+                    text: chartDetails.title
+                }
+            }
+        });
+    }
+</script>
+<html>
+<head>
+    <title>Hyperledger Caliper Report</title>
+    <meta charset="UTF-8"/>
+    <style type="text/css">
+        .left-column {
+            position: fixed;
+            width:20%;
+        }
+        .left-column ul {
+            display: block;
+            padding: 0;
+            list-style: none;
+            border-bottom: 1px solid #d9d9d9;
+            font-size: 14px;
+        }
+        .left-column h2{
+            font-size: 24px;
+            font-weight: 400;
+            margin-block-end: 0.5em;
+        }
+        .left-column h3{
+            font-size: 18px;
+            font-weight: 400;
+            margin-block-end: 0.5em;
+        }
+        .left-column li{
+            margin-left: 10px;
+            margin-bottom: 5px;
+            color: #5e6b73;
+        }
+        .right-column {
+            margin-left: 22%;
+            width:60%;
+        }
+        .right-column table {
+            font-size:11px;
+            color:#333333;
+            border-width: 1px;
+            border-color: #666666;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+        .right-column h2{
+            font-weight: 400;
+        }
+        .right-column h3{
+            font-weight: 400;
+        }
+        .right-column h4 {
+            font-weight: 400;
+            margin-block-end: 0;
+        }
+        .right-column th {
+            border-width: 1px;
+            font-size: small;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #f2f2f2;
+        }
+        .right-column td {
+            border-width: 1px;
+            font-size: small;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #ffffff;
+            font-weight: 400;
+        }
+        .tag {
+            margin-bottom: 10px;
+            padding: 5px 10px;
+        }
+        pre {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            -khtml-border-radius: 5px;
+            overflow:auto;
+            max-height:300px;
+            font-size:12px;
+        }
+        .charting {
+            display:flex;
+            flex-direction:row;
+            flex-wrap: wrap;
+            page-break-inside: auto;
+        }
+        .chart {
+            display:flex;
+            flex:1;
+            max-width: 50%;
+        }
+    </style>
+</head>
+<body style="font-family: IBM Plex Sans; font-weight: 200;">
+    <main>
+        <div class="left-column">
+            <img src="https://hyperledger.github.io/caliper/assets/img/hyperledger_caliper_logo_color.png" style="width:95%;" alt="">
+            <ul>
+                <h3>&nbspBasic information</h3>
+                <li>DLT: &nbsp<span style="font-weight: 500;">fabric</span></li>
+                <li>Name: &nbsp<span style="font-weight: 500;"></span></li>
+                <li>Description: &nbsp<span style="font-weight: 500;"></span></li>
+                <li>Benchmark Rounds: &nbsp<span style="font-weight: 500;">2</span></li>
+                <li><a href="#benchmarkInfo">Details</a></li>
+            </ul>
+            <ul>
+                <h3>&nbspBenchmark results</h3>
+                <li><a href="#benchmarksummary">Summary</a></li>
+                    <li><a href="#Create">Create</a></li>
+                    <li><a href="#Query">Query</a></li>
+            </ul>
+            <ul>
+                <h3>&nbspSystem under test</h3>
+                <li>Version: &nbsp<span style="font-weight: 500;">2.1.0</span></li>
+                <li>Size: &nbsp<span style="font-weight: 500;">2 Orgs with 2 Peer</span></li>
+                <li>Orderer: &nbsp<span style="font-weight: 500;">Raft</span></li>
+                <li>Distribution: &nbsp<span style="font-weight: 500;">Single Host</span></li>
+                <li>StateDB: &nbsp<span style="font-weight: 500;">CouchDB</span></li>
+                <li><a href="#sutdetails">Details</a></li>
+            </ul>
+        </div>
+
+        <div class="right-column">
+            <h1 style="padding-top: 3em; font-weight: 500;">Caliper report</h1>
+            <div style="border-bottom: 1px solid #d9d9d9; margin-bottom: 10px;" id="benchmarksummary">
+                <table style="min-width: 100%;">
+                    <h3>Summary of performance metrics</h3>
+                    <tr>
+                         <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
+                    </tr>
+
+                    <tr>
+                         <td>Create</td> <td>1264</td> <td>36</td> <td>12.2</td> <td>143.00</td> <td>13.17</td> <td>92.87</td> <td>5.4</td>
+                    </tr>
+                    <tr>
+                         <td>Query</td> <td>1300</td> <td>0</td> <td>17.8</td> <td>0.18</td> <td>0.01</td> <td>0.02</td> <td>17.8</td>
+                    </tr>
+                </table>
+            </div>
+            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="Create">
+                <h2>Benchmark round: Create</h2>
+                <p></p>
+                <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
+  type: maximum-rate
+  opts:
+    tps: 10
+    step: 10
+</pre>
+                        <h3>Performance metrics for Create</h3>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                     <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
+                                </tr>
+                                <tr>
+                                     <td>Create</td> <td>1264</td> <td>36</td> <td>12.2</td> <td>143.00</td> <td>13.17</td> <td>92.87</td> <td>5.4</td>
+                                </tr>
+                            </table>
+                        <h3>Resource utilization for Create</h3>
+                            <h4>Resource monitor: docker</h4>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                <table>
+                                    <tr>
+                                         <th>Name</th> <th>CPU%(max)</th> <th>CPU%(avg)</th> <th>Memory(max) [MB]</th> <th>Memory(avg) [MB]</th> <th>Traffic In [MB]</th> <th>Traffic Out [MB]</th> <th>Disc Write [MB]</th> <th>Disc Read [B]</th>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.org3.example.com-fabcar_1-f9992142394e25848640d0123f3ba7041856afcbabf5f15391108cf2d3be5c12</td> <td>4.76</td> <td>0.45</td> <td>19.6</td> <td>15.5</td> <td>2.08</td> <td>0.723</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.org2.example.com-fabcar_1-f9992142394e25848640d0123f3ba7041856afcbabf5f15391108cf2d3be5c12</td> <td>6.53</td> <td>0.50</td> <td>18.0</td> <td>13.8</td> <td>2.08</td> <td>0.720</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.org1.example.com-fabcar_1-f9992142394e25848640d0123f3ba7041856afcbabf5f15391108cf2d3be5c12</td> <td>7.12</td> <td>0.49</td> <td>18.0</td> <td>13.9</td> <td>2.10</td> <td>0.732</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.org1.example.com</td> <td>35.61</td> <td>13.91</td> <td>155</td> <td>124</td> <td>28.8</td> <td>12.5</td> <td>7.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer1.org2.example.com</td> <td>17.96</td> <td>11.83</td> <td>114</td> <td>96.1</td> <td>10.4</td> <td>22.4</td> <td>7.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.org2.example.com</td> <td>1.30</td> <td>0.05</td> <td>14.8</td> <td>14.8</td> <td>0.000174</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>orderer.example.com</td> <td>11.07</td> <td>1.85</td> <td>76.0</td> <td>53.8</td> <td>13.3</td> <td>20.4</td> <td>12.6</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb5</td> <td>11.50</td> <td>3.97</td> <td>61.0</td> <td>60.2</td> <td>0.282</td> <td>0.328</td> <td>3.57</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb4</td> <td>10.36</td> <td>2.83</td> <td>60.6</td> <td>58.9</td> <td>0.261</td> <td>0.288</td> <td>3.57</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>orderer2.example.com</td> <td>6.08</td> <td>1.31</td> <td>58.9</td> <td>45.4</td> <td>7.15</td> <td>13.2</td> <td>12.6</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.org3.example.com</td> <td>2.14</td> <td>0.05</td> <td>12.8</td> <td>12.8</td> <td>0.000174</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.org2.example.com</td> <td>37.35</td> <td>13.56</td> <td>165</td> <td>139</td> <td>26.5</td> <td>12.0</td> <td>7.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb2</td> <td>19.80</td> <td>2.80</td> <td>61.5</td> <td>60.0</td> <td>0.259</td> <td>0.284</td> <td>3.57</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb3</td> <td>14.59</td> <td>2.30</td> <td>62.6</td> <td>61.3</td> <td>0.283</td> <td>0.328</td> <td>3.56</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>orderer3.example.com</td> <td>2.95</td> <td>1.04</td> <td>56.7</td> <td>45.1</td> <td>6.93</td> <td>6.98</td> <td>12.6</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer1.org3.example.com</td> <td>18.74</td> <td>11.51</td> <td>119</td> <td>96.1</td> <td>8.67</td> <td>19.8</td> <td>7.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.org3.example.com</td> <td>32.91</td> <td>13.89</td> <td>161</td> <td>130</td> <td>32.1</td> <td>12.0</td> <td>7.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer1.org1.example.com</td> <td>17.33</td> <td>10.92</td> <td>122</td> <td>102</td> <td>8.10</td> <td>20.7</td> <td>7.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.org1.example.com</td> <td>1.87</td> <td>0.06</td> <td>14.7</td> <td>14.7</td> <td>0.000174</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb0</td> <td>9.83</td> <td>2.89</td> <td>63.7</td> <td>61.8</td> <td>0.259</td> <td>0.285</td> <td>3.57</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb1</td> <td>11.02</td> <td>2.26</td> <td>63.6</td> <td>62.2</td> <td>0.284</td> <td>0.329</td> <td>3.56</td> <td>0.00</td>
+                                    </tr>
+                                </table>
+                                </tr>
+                            </table>
+                            <div class="charting">
+                            </div>
+            </div>
+
+            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="Query">
+                <h2>Benchmark round: Query</h2>
+                <p></p>
+                <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
+  type: maximum-rate
+  opts:
+    tps: 10
+    step: 10
+</pre>
+                        <h3>Performance metrics for Query</h3>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                     <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
+                                </tr>
+                                <tr>
+                                     <td>Query</td> <td>1300</td> <td>0</td> <td>17.8</td> <td>0.18</td> <td>0.01</td> <td>0.02</td> <td>17.8</td>
+                                </tr>
+                            </table>
+                        <h3>Resource utilization for Query</h3>
+            </div>
+
+            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;">
+                <h2>Test Environment</h2>
+                <h3>benchmark config</h3>
+                <pre id="benchmarkInfo" style="overflow: visible;white-space: pre-wrap;max-height:100%;">workers:
+  type: local
+rounds:
+  - label: Create
+    txNumber: 1300
+    rateControl:
+      type: maximum-rate
+      opts:
+        tps: 10
+        step: 10
+    workload:
+      module: benchmarks&#x2F;scenario&#x2F;createCar.js
+  - label: Query
+    txNumber: 1300
+    rateControl:
+      type: maximum-rate
+      opts:
+        tps: 10
+        step: 10
+    workload:
+      module: benchmarks&#x2F;scenario&#x2F;queryCar.js
+      arguments:
+        assets: 10
+</pre>
+                <h3>SUT</h3>
+                <pre id="sutdetails">not provided</pre>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
